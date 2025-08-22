@@ -192,43 +192,46 @@ function App() {
     return isAuthenticated && currentUser && post.author === currentUser.id;
   };
 
-  if (loading) return <div className="App">로딩 중...</div>;
+  if (loading) return <div className="loading">로딩 중...</div>;
 
   return (
     <div className="App">
-      <h1>블로그</h1>
-      
-      {/* 인증 상태 표시 */}
-      <div style={{ margin: '10px 0', padding: '10px', backgroundColor: '#f0f0f0' }}>
-        {isAuthenticated ? (
-          <div>
-            <span>안녕하세요, <strong>{currentUser?.username}</strong>님! </span>
-            <button onClick={handleLogout} style={{ backgroundColor: 'red', color: 'white', marginLeft: '10px' }}>
-              로그아웃
-            </button>
-          </div>
-        ) : (
-          <div>
-            <span>로그인이 필요합니다. </span>
-            <button onClick={() => setShowLoginForm(true)} style={{ backgroundColor: 'blue', color: 'white', marginLeft: '10px' }}>
-              로그인
-            </button>
-            <button onClick={() => setShowRegisterForm(true)} style={{ backgroundColor: 'green', color: 'white', marginLeft: '10px' }}>
-              회원가입
-            </button>
-          </div>
-        )}
-      </div>
+      {/* 상단 네비게이션 바 */}
+      <nav className="navbar">
+        <div className="nav-brand">
+          <h1>💻 CodeLog</h1>
+          <p className="nav-subtitle">개발자의 생각을 담는 공간</p>
+        </div>
+        <div className="nav-auth">
+          {isAuthenticated ? (
+            <div className="user-info">
+              <span>안녕하세요, <strong>{currentUser?.username}</strong>님!</span>
+              <button className="btn btn-outline" onClick={handleLogout}>
+                로그아웃
+              </button>
+            </div>
+          ) : (
+            <div className="auth-buttons">
+              <button className="btn btn-outline" onClick={() => setShowLoginForm(true)}>
+                로그인
+              </button>
+              <button className="btn btn-primary" onClick={() => setShowRegisterForm(true)}>
+                회원가입
+              </button>
+            </div>
+          )}
+        </div>
+      </nav>
 
-      {error && <div style={{ color: 'red', margin: '10px 0' }}>{error}</div>}
+      {error && <div className="error-message">{error}</div>}
 
       {/* 로그인 폼 */}
       {showLoginForm && (
-        <div style={{ margin: '20px 0', padding: '20px', border: '1px solid #ccc', backgroundColor: '#f9f9f9' }}>
+        <div className="form-container">
           <h2>로그인</h2>
           <form onSubmit={handleLogin}>
-            <div>
-              <label>사용자명: </label>
+            <div className="form-group">
+              <label>사용자명</label>
               <input
                 type="text"
                 value={authForm.username}
@@ -236,8 +239,8 @@ function App() {
                 required
               />
             </div>
-            <div>
-              <label>비밀번호: </label>
+            <div className="form-group">
+              <label>비밀번호</label>
               <input
                 type="password"
                 value={authForm.password}
@@ -245,8 +248,8 @@ function App() {
                 required
               />
             </div>
-            <button type="submit">로그인</button>
-            <button type="button" onClick={() => setShowLoginForm(false)} style={{ marginLeft: '10px' }}>
+            <button type="submit" className="btn btn-primary">로그인</button>
+            <button type="button" className="btn btn-secondary" onClick={() => setShowLoginForm(false)}>
               취소
             </button>
           </form>
@@ -255,11 +258,11 @@ function App() {
 
       {/* 회원가입 폼 */}
       {showRegisterForm && (
-        <div style={{ margin: '20px 0', padding: '20px', border: '1px solid #ccc', backgroundColor: '#f9f9f9' }}>
+        <div className="form-container">
           <h2>회원가입</h2>
           <form onSubmit={handleRegister}>
-            <div>
-              <label>사용자명: </label>
+            <div className="form-group">
+              <label>사용자명</label>
               <input
                 type="text"
                 value={authForm.username}
@@ -267,8 +270,8 @@ function App() {
                 required
               />
             </div>
-            <div>
-              <label>이메일: </label>
+            <div className="form-group">
+              <label>이메일</label>
               <input
                 type="email"
                 value={authForm.email}
@@ -276,8 +279,8 @@ function App() {
                 required
               />
             </div>
-            <div>
-              <label>비밀번호: </label>
+            <div className="form-group">
+              <label>비밀번호</label>
               <input
                 type="password"
                 value={authForm.password}
@@ -285,8 +288,8 @@ function App() {
                 required
               />
             </div>
-            <div>
-              <label>비밀번호 확인: </label>
+            <div className="form-group">
+              <label>비밀번호 확인</label>
               <input
                 type="password"
                 value={authForm.password_confirm}
@@ -294,108 +297,119 @@ function App() {
                 required
               />
             </div>
-            <button type="submit">회원가입</button>
-            <button type="button" onClick={() => setShowRegisterForm(false)} style={{ marginLeft: '10px' }}>
+            <button type="submit" className="btn btn-success">회원가입</button>
+            <button type="button" className="btn btn-secondary" onClick={() => setShowRegisterForm(false)}>
               취소
             </button>
           </form>
         </div>
       )}
 
-      {/* 새 글 작성 폼 (로그인한 사용자만) */}
-      {isAuthenticated && (
-        <div style={{ margin: '20px 0', padding: '20px', border: '1px solid #ccc' }}>
-          <h2>새 글 작성</h2>
-          <form onSubmit={createPost}>
-            <div>
-              <label>제목: </label>
-              <input
-                type="text"
-                value={newPost.title}
-                onChange={(e) => setNewPost({...newPost, title: e.target.value})}
-                required
-              />
-            </div>
-            <div>
-              <label>내용: </label>
-              <textarea
-                value={newPost.content}
-                onChange={(e) => setNewPost({...newPost, content: e.target.value})}
-                required
-              />
-            </div>
-            <button type="submit">글 작성</button>
-          </form>
-        </div>
-      )}
-
-      {/* 글 목록 */}
-      <div>
-        <h2>글 목록</h2>
-        {!isAuthenticated ? (
-          <p>글을 보려면 로그인이 필요합니다.</p>
-        ) : posts.length === 0 ? (
-          <p>작성된 글이 없습니다.</p>
-        ) : (
-          posts.map(post => (
-            <div key={post.id} style={{ margin: '10px 0', padding: '10px', border: '1px solid #ddd' }}>
-              {editingPost === post.id ? (
-                // 수정 모드
-                <div>
-                  <div>
-                    <label>제목: </label>
-                    <input
-                      type="text"
-                      value={editForm.title}
-                      onChange={(e) => setEditForm({...editForm, title: e.target.value})}
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label>내용: </label>
-                    <textarea
-                      value={editForm.content}
-                      onChange={(e) => setEditForm({...editForm, content: e.target.value})}
-                      required
-                    />
-                  </div>
-                  <button onClick={() => updatePost(post.id)} style={{ backgroundColor: 'green', color: 'white', marginRight: '5px' }}>
-                    수정 완료
-                  </button>
-                  <button onClick={cancelEdit} style={{ backgroundColor: 'gray', color: 'white' }}>
-                    취소
-                  </button>
-                </div>
-              ) : (
-                // 일반 모드
-                <div>
-                  <h3>{post.title}</h3>
-                  <p>{post.content}</p>
-                  <small>작성자: {post.author_username || '알 수 없음'} | 작성일: {new Date(post.created_at).toLocaleString()}</small>
-                  <div style={{ marginTop: '10px' }}>
-                    {canEditPost(post) && (
-                      <button 
-                        onClick={() => startEdit(post)}
-                        style={{ backgroundColor: 'blue', color: 'white', marginRight: '5px' }}
-                      >
-                        수정
-                      </button>
-                    )}
-                    {canEditPost(post) && (
-                      <button 
-                        onClick={() => deletePost(post.id)}
-                        style={{ backgroundColor: 'red', color: 'white' }}
-                      >
-                        삭제
-                      </button>
-                    )}
-                  </div>
-                </div>
-              )}
-            </div>
-          ))
+      {/* 메인 콘텐츠 */}
+      <main className="main-content">
+        {/* 새 글 작성 폼 (로그인한 사용자만) */}
+        {isAuthenticated && (
+          <div className="form-container">
+            <h2>새 글 작성</h2>
+            <form onSubmit={createPost}>
+              <div className="form-group">
+                <label>제목</label>
+                <input
+                  type="text"
+                  value={newPost.title}
+                  onChange={(e) => setNewPost({...newPost, title: e.target.value})}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label>내용</label>
+                <textarea
+                  value={newPost.content}
+                  onChange={(e) => setNewPost({...newPost, content: e.target.value})}
+                  required
+                />
+              </div>
+              <button type="submit" className="btn btn-primary">글 작성</button>
+            </form>
+          </div>
         )}
-      </div>
+
+        {/* 글 목록 */}
+        <div className="posts-container">
+          <h2>📝 최근 글</h2>
+          {!isAuthenticated ? (
+            <div className="empty-state">
+              <p>글을 보려면 로그인이 필요합니다.</p>
+            </div>
+          ) : posts.length === 0 ? (
+            <div className="empty-state">
+              <p>아직 작성된 글이 없습니다. 첫 번째 글을 작성해보세요! 🚀</p>
+            </div>
+          ) : (
+            posts.map(post => (
+              <div key={post.id} className={`post-card ${editingPost === post.id ? 'edit-mode' : ''}`}>
+                {editingPost === post.id ? (
+                  // 수정 모드
+                  <div>
+                    <div className="form-group">
+                      <label>제목</label>
+                      <input
+                        type="text"
+                        value={editForm.title}
+                        onChange={(e) => setEditForm({...editForm, title: e.target.value})}
+                        required
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label>내용</label>
+                      <textarea
+                        value={editForm.content}
+                        onChange={(e) => setEditForm({...editForm, content: e.target.value})}
+                        required
+                      />
+                    </div>
+                    <div className="post-actions">
+                      <button onClick={() => updatePost(post.id)} className="btn btn-success">
+                        수정 완료
+                      </button>
+                      <button onClick={cancelEdit} className="btn btn-secondary">
+                        취소
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  // 일반 모드
+                  <div>
+                    <h3>{post.title}</h3>
+                    <p>{post.content}</p>
+                    <div className="post-meta">
+                      작성자: {post.author_username || '알 수 없음'} | 작성일: {new Date(post.created_at).toLocaleString()}
+                    </div>
+                    <div className="post-actions">
+                      {canEditPost(post) && (
+                        <button 
+                          onClick={() => startEdit(post)}
+                          className="btn btn-info"
+                        >
+                          ✏️ 수정
+                        </button>
+                      )}
+                      {canEditPost(post) && (
+                        <button 
+                          onClick={() => deletePost(post.id)}
+                          className="btn btn-danger"
+                        >
+                          🗑️ 삭제
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))
+          )}
+        </div>
+      </main>
     </div>
   );
 }
