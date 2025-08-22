@@ -7,6 +7,8 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [newPost, setNewPost] = useState({ title: '', content: '' });
+  const [editingPost, setEditingPost] = useState(null);
+  const [editForm, setEditForm] = useState({ title: '', content: '' });
 
   const API_BASE_URL = 'http://localhost:8001/api';
 
@@ -36,6 +38,32 @@ function App() {
     } catch (err) {
       setError('글 작성에 실패했습니다.');
       console.error('Error creating post:', err);
+    }
+  };
+
+  // 글 수정 시작
+  const startEdit = (post) => {
+    setEditingPost(post.id);
+    setEditForm({ title: post.title, content: post.content });
+  };
+
+  // 글 수정 취소
+  const cancelEdit = () => {
+    setEditingPost(null);
+    setEditForm({ title: '', content: '' });
+  };
+
+  // 글 수정 완료
+  const updatePost = async (postId) => {
+    try {
+      const response = await axios.put(`${API_BASE_URL}/posts/${postId}/`, editForm);
+      setPosts(posts.map(post => post.id === postId ? response.data : post));
+      setEditingPost(null);
+      setEditForm({ title: '', content: '' });
+      setError(null);
+    } catch (err) {
+      setError('글 수정에 실패했습니다.');
+      console.error('Error updating post:', err);
     }
   };
 
@@ -96,15 +124,55 @@ function App() {
         ) : (
           posts.map(post => (
             <div key={post.id} style={{ margin: '10px 0', padding: '10px', border: '1px solid #ddd' }}>
-              <h3>{post.title}</h3>
-              <p>{post.content}</p>
-              <small>작성일: {new Date(post.created_at).toLocaleString()}</small>
-              <button 
-                onClick={() => deletePost(post.id)}
-                style={{ marginLeft: '10px', backgroundColor: 'red', color: 'white' }}
-              >
-                삭제
-              </button>
+              {editingPost === post.id ? (
+                // 수정 모드
+                <div>
+                  <div>
+                    <label>제목: </label>
+                    <input
+                      type="text"
+                      value={editForm.title}
+                      onChange={(e) => setEditForm({...editForm, title: e.target.value})}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label>내용: </label>
+                    <textarea
+                      value={editForm.content}
+                      onChange={(e) => setEditForm({...editForm, content: e.target.value})}
+                      required
+                    />
+                  </div>
+                  <button onClick={() => updatePost(post.id)} style={{ backgroundColor: 'green', color: 'white', marginRight: '5px' }}>
+                    수정 완료
+                  </button>
+                  <button onClick={cancelEdit} style={{ backgroundColor: 'gray', color: 'white' }}>
+                    취소
+                  </button>
+                </div>
+              ) : (
+                // 일반 모드
+                <div>
+                  <h3>{post.title}</h3>
+                  <p>{post.content}</p>
+                  <small>작성일: {new Date(post.created_at).toLocaleString()}</small>
+                  <div style={{ marginTop: '10px' }}>
+                    <button 
+                      onClick={() => startEdit(post)}
+                      style={{ backgroundColor: 'blue', color: 'white', marginRight: '5px' }}
+                    >
+                      수정
+                    </button>
+                    <button 
+                      onClick={() => deletePost(post.id)}
+                      style={{ backgroundColor: 'red', color: 'white' }}
+                    >
+                      삭제
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           ))
         )}
