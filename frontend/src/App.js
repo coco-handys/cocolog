@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './App.css';
 
+// API 기본 URL 설정 (배포 환경에서는 환경변수 사용)
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8001/api';
+
 function App() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -21,8 +24,6 @@ function App() {
     password: '',
     password_confirm: ''
   });
-
-  const API_BASE_URL = 'http://localhost:8001/api';
 
   // 인증 토큰 설정
   const setAuthToken = (token) => {
