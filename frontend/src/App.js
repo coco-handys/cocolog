@@ -3,7 +3,7 @@ import axios from 'axios';
 import './App.css';
 
 // API 기본 URL 설정 (배포 환경에서는 환경변수 사용)
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8001/api';
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8002/api';
 
 function App() {
   const [posts, setPosts] = useState([]);
