@@ -8,7 +8,7 @@ function App() {
   const [error, setError] = useState(null);
   const [newPost, setNewPost] = useState({ title: '', content: '' });
 
-  const API_BASE_URL = 'http://localhost:8000/api';
+  const API_BASE_URL = 'http://localhost:8001/api';
 
   // 글 목록 불러오기
   const fetchPosts = async () => {
