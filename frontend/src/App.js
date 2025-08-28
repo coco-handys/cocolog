@@ -8,7 +8,7 @@ const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8002/api
 
 function App() {
 
-  const { isAutenticated, setIsAuthenticated } = useAuth()
+  const { isAuthenticated, setIsAuthenticated, currentUser: authUser, setCurrentUser: setAuthUser } = useAuth()
 
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -18,7 +18,6 @@ function App() {
   const [editForm, setEditForm] = useState({ title: '', content: '' });
   
   // 인증 관련 상태
-  const [currentUser, setCurrentUser] = useState(null);
   const [showLoginForm, setShowLoginForm] = useState(false);
   const [showRegisterForm, setShowRegisterForm] = useState(false);
   const [authForm, setAuthForm] = useState({
@@ -28,22 +27,12 @@ function App() {
     password_confirm: ''
   });
 
-  // 인증 토큰 설정
-  const setAuthToken = (token) => {
-    if (token) {
-      localStorage.setItem('token', token);
-      axios.defaults.headers.common['Authorization'] = `Token ${token}`;
-    } else {
-      localStorage.removeItem('token');
-      delete axios.defaults.headers.common['Authorization'];
-    }
-  };
+
 
   // 로그인 상태 확인
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      setAuthToken(token);
       checkAuthStatus();
     } else {
       setLoading(false);
@@ -54,12 +43,11 @@ function App() {
   const checkAuthStatus = async () => {
     try {
       const response = await axios.get(`${API_BASE_URL}/auth/profile/`);
-      setCurrentUser(response.data);
+      setAuthUser(response.data);
       setIsAuthenticated(true);
     } catch (err) {
-      setAuthToken(null);
       setIsAuthenticated(false);
-      setCurrentUser(null);
+      setAuthUser(null);
     } finally {
       setLoading(false);
     }
@@ -94,8 +82,7 @@ function App() {
         password: authForm.password
       });
       
-      setAuthToken(response.data.token);
-      setCurrentUser(response.data.user);
+      setAuthUser(response.data.user);
       setIsAuthenticated(true);
       setShowLoginForm(false);
       setAuthForm({ username: '', email: '', password: '', password_confirm: '' });
@@ -181,7 +168,7 @@ function App() {
 
   // 권한 확인 함수
   const canEditPost = (post) => {
-    return isAuthenticated && currentUser && post.author === currentUser.id;
+    return isAuthenticated && authUser && post.author === authUser.id;
   };
 
   if (loading) return <div className="loading">로딩 중...</div>;
