@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './App.css';
+import useAuth from "./hooks/useAuth";
 
 // API 기본 URL 설정 (배포 환경에서는 환경변수 사용)
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8002/api';
 
 function App() {
+
+  const { isAutenticated, setIsAuthenticated } = useAuth()
+
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -14,7 +18,6 @@ function App() {
   const [editForm, setEditForm] = useState({ title: '', content: '' });
   
   // 인증 관련 상태
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const [showLoginForm, setShowLoginForm] = useState(false);
   const [showRegisterForm, setShowRegisterForm] = useState(false);
@@ -105,19 +108,7 @@ function App() {
     }
   };
 
-  // 로그아웃
-  const handleLogout = async () => {
-    try {
-      await axios.post(`${API_BASE_URL}/auth/logout/`);
-    } catch (err) {
-      console.error('Logout error:', err);
-    } finally {
-      setAuthToken(null);
-      setIsAuthenticated(false);
-      setCurrentUser(null);
-      setPosts([]);
-    }
-  };
+
 
   // 글 목록 불러오기
   const fetchPosts = async () => {
@@ -198,31 +189,7 @@ function App() {
   return (
     <div className="App">
       {/* 상단 네비게이션 바 */}
-      <nav className="navbar">
-        <div className="nav-brand">
-          <h1>💻 CodeLog</h1>
-          <p className="nav-subtitle">개발자의 생각을 담는 공간</p>
-        </div>
-        <div className="nav-auth">
-          {isAuthenticated ? (
-            <div className="user-info">
-              <span>안녕하세요, <strong>{currentUser?.username}</strong>님!</span>
-              <button className="btn btn-outline" onClick={handleLogout}>
-                로그아웃
-              </button>
-            </div>
-          ) : (
-            <div className="auth-buttons">
-              <button className="btn btn-outline" onClick={() => setShowLoginForm(true)}>
-                로그인
-              </button>
-              <button className="btn btn-primary" onClick={() => setShowRegisterForm(true)}>
-                회원가입
-              </button>
-            </div>
-          )}
-        </div>
-      </nav>
+
 
       {error && <div className="error-message">{error}</div>}
 
