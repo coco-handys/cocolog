@@ -8,7 +8,7 @@ const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8002/api
 
 function App() {
 
-  const { isAuthenticated, setIsAuthenticated, currentUser: authUser, setCurrentUser: setAuthUser } = useAuth()
+  const { isAuthenticated, setIsAuthenticated, currentUser: authUser, setCurrentUser: setAuthUser, setAuthToken } = useAuth()
 
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -33,6 +33,7 @@ function App() {
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
+      setAuthToken(token);
       checkAuthStatus();
     } else {
       setLoading(false);
@@ -46,6 +47,7 @@ function App() {
       setAuthUser(response.data);
       setIsAuthenticated(true);
     } catch (err) {
+      setAuthToken(null);
       setIsAuthenticated(false);
       setAuthUser(null);
     } finally {
@@ -82,6 +84,7 @@ function App() {
         password: authForm.password
       });
       
+      setAuthToken(response.data.token);
       setAuthUser(response.data.user);
       setIsAuthenticated(true);
       setShowLoginForm(false);
