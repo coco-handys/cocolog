@@ -179,7 +179,46 @@ function App() {
   return (
     <div className="App">
       {/* 상단 네비게이션 바 */}
-
+      <nav className="navbar">
+        <div className="nav-brand">
+          <h1>🚀 DevLog</h1>
+        </div>
+        <div className="nav-actions">
+          {!isAuthenticated ? (
+            <>
+              <button 
+                className="btn btn-primary"
+                onClick={() => setShowLoginForm(true)}
+              >
+                로그인
+              </button>
+              <button 
+                className="btn btn-secondary"
+                onClick={() => setShowRegisterForm(true)}
+              >
+                회원가입
+              </button>
+            </>
+          ) : (
+            <>
+              <span className="user-info">
+                안녕하세요, {authUser?.username}님! 👋
+              </span>
+              <button 
+                className="btn btn-outline"
+                onClick={() => {
+                  setAuthToken(null);
+                  setIsAuthenticated(false);
+                  setAuthUser(null);
+                  setPosts([]);
+                }}
+              >
+                로그아웃
+              </button>
+            </>
+          )}
+        </div>
+      </nav>
 
       {error && <div className="error-message">{error}</div>}
 
