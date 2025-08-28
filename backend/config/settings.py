@@ -191,9 +191,19 @@ CORS_ALLOWED_ORIGINS = [
     "https://cocolog-1wog0cqfh-cocos-projects-1d5fa463.vercel.app",
     "https://cocolog.vercel.app",
     "https://cocolog-frontend.vercel.app",
+    # Vercel 도메인 패턴 추가
+    "https://*.vercel.app",
+    "https://*.vercel.app",
 ]
 
 CORS_ALLOW_CREDENTIALS = True
+
+# CORS 추가 설정
+CORS_ALLOW_ALL_ORIGINS = False
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r"https://.*\.vercel\.app$",
+    r"https://.*\.railway\.app$",
+]
 
 # 보안 설정 (배포 환경에서만)
 if IS_PRODUCTION and not DEBUG:
