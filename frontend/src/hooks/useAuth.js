@@ -42,5 +42,14 @@ export default function useAuth() {
     }
   }, []);
 
-  return { isAuthenticated, setIsAuthenticated, currentUser, setCurrentUser, loading, setAuthToken, checkAuthStatus };
+  return { 
+    isAuthenticated, 
+    setIsAuthenticated, 
+    currentUser, 
+    setCurrentUser, 
+    loading, 
+    setLoading,
+    setAuthToken, 
+    checkAuthStatus 
+  };
 }
