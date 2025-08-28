@@ -4,7 +4,7 @@ import './App.css';
 import useAuth from "./hooks/useAuth";
 
 // API 기본 URL 설정 (배포 환경에서는 환경변수 사용)
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8002/api';
+const API_BASE_URL = 'https://cocolog-production.up.railway.app/api';
 
 function App() {
 
