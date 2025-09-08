@@ -1,13 +1,18 @@
 import React, { useState } from 'react';
 import PostForm from '../components/PostForm';
 
-const CreatePostPage = ({ onSubmit, onCancel }) => {
+type CreatePostPageProps = {
+  onSubmit: (data: { title: string; content: string }) => Promise<void> | void;
+  onCancel: () => void;
+};
+
+const CreatePostPage: React.FC<CreatePostPageProps> = ({ onSubmit, onCancel }) => {
   const [postData, setPostData] = useState({
     title: '',
     content: ''
   });
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     await onSubmit(postData);
     setPostData({ title: '', content: '' });
@@ -22,7 +27,7 @@ const CreatePostPage = ({ onSubmit, onCancel }) => {
         <PostForm
           formData={postData}
           onChange={setPostData}
-          onSubmit={handleSubmit}
+          onSubmit={() => onSubmit(postData)}
           onCancel={onCancel}
           submitText="글 작성"
           cancelText="취소"

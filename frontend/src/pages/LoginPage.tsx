@@ -1,13 +1,20 @@
 import React, { useState } from 'react';
 import AuthForm from '../components/AuthForm';
 
-const LoginPage = ({ onLogin, onSwitchToRegister }) => {
-  const [authForm, setAuthForm] = useState({
+type LoginData = { username: string; password: string };
+
+type LoginPageProps = {
+  onLogin: (data: LoginData) => Promise<void> | void;
+  onSwitchToRegister: () => void;
+};
+
+const LoginPage: React.FC<LoginPageProps> = ({ onLogin, onSwitchToRegister }) => {
+  const [authForm, setAuthForm] = useState<LoginData>({
     username: '',
     password: ''
   });
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     await onLogin(authForm);
   };
@@ -21,8 +28,8 @@ const LoginPage = ({ onLogin, onSwitchToRegister }) => {
         <AuthForm
           type="login"
           formData={authForm}
-          onChange={setAuthForm}
-          onSubmit={handleSubmit}
+          onChange={setAuthForm as any}
+          onSubmit={() => onLogin(authForm)}
           onSwitchMode={onSwitchToRegister}
           switchText="계정이 없으신가요? 회원가입"
         />

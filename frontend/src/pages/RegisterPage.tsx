@@ -1,15 +1,22 @@
 import React, { useState } from 'react';
 import AuthForm from '../components/AuthForm';
 
-const RegisterPage = ({ onRegister, onSwitchToLogin }) => {
-  const [authForm, setAuthForm] = useState({
+type RegisterData = { username: string; email: string; password: string; password_confirm: string };
+
+type RegisterPageProps = {
+  onRegister: (data: RegisterData) => Promise<void> | void;
+  onSwitchToLogin: () => void;
+};
+
+const RegisterPage: React.FC<RegisterPageProps> = ({ onRegister, onSwitchToLogin }) => {
+  const [authForm, setAuthForm] = useState<RegisterData>({
     username: '',
     email: '',
     password: '',
     password_confirm: ''
   });
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     await onRegister(authForm);
   };
@@ -23,8 +30,8 @@ const RegisterPage = ({ onRegister, onSwitchToLogin }) => {
         <AuthForm
           type="register"
           formData={authForm}
-          onChange={setAuthForm}
-          onSubmit={handleSubmit}
+          onChange={setAuthForm as any}
+          onSubmit={() => onRegister(authForm)}
           onSwitchMode={onSwitchToLogin}
           switchText="이미 계정이 있으신가요? 로그인"
         />

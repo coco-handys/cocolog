@@ -1,17 +1,17 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8002/api';
+const API_BASE_URL: string = (process.env.REACT_APP_API_URL as string) || 'http://localhost:8002/api';
 
-interface User {
+export type AuthUser = {
   id: number;
   username: string;
-  email: string;
-}
+  email?: string;
+};
 
 export default function useAuth() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [currentUser, setCurrentUser] = useState<AuthUser | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
   const setAuthToken = (token: string | null) => {
@@ -24,9 +24,9 @@ export default function useAuth() {
     }
   };
 
-  const checkAuthStatus = async () => {
+  const checkAuthStatus = async (): Promise<void> => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/auth/profile/`);
+      const response = await axios.get<AuthUser>(`${API_BASE_URL}/auth/profile/`);
       setCurrentUser(response.data);
       setIsAuthenticated(true);
     } catch {
@@ -46,7 +46,17 @@ export default function useAuth() {
     } else {
       setLoading(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return { isAuthenticated, setIsAuthenticated, currentUser, setCurrentUser, loading, setAuthToken, checkAuthStatus };
+  return { 
+    isAuthenticated, 
+    setIsAuthenticated, 
+    currentUser, 
+    setCurrentUser, 
+    loading, 
+    setLoading,
+    setAuthToken, 
+    checkAuthStatus 
+  };
 }

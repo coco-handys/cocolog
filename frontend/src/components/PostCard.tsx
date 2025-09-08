@@ -1,8 +1,17 @@
 import React, { useState } from 'react';
 import PostForm from './PostForm';
+import { Post } from '../App';
 
-const PostCard = ({ post, onEdit, onDelete, canEdit }) => {
+type PostCardProps = {
+  post: Post;
+  onEdit: (postId: number, data: { title: string; content: string }) => Promise<void> | void;
+  onDelete: (postId: number) => Promise<void> | void;
+  canEdit: boolean;
+};
+
+const PostCard: React.FC<PostCardProps> = ({ post, onEdit, onDelete, canEdit }) => {
   const [isEditing, setIsEditing] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const handleEdit = () => {
     setIsEditing(true);
@@ -12,9 +21,21 @@ const PostCard = ({ post, onEdit, onDelete, canEdit }) => {
     setIsEditing(false);
   };
 
-  const handleSubmit = async (formData) => {
+  const handleSubmit = async (formData: { title: string; content: string }) => {
     await onEdit(post.id, formData);
     setIsEditing(false);
+  };
+
+  const handleDelete = async () => {
+    if (isDeleting) return;
+    const confirmed = window.confirm('정말 이 글을 삭제하시겠습니까? 삭제 후에는 복구할 수 없습니다.');
+    if (!confirmed) return;
+    try {
+      setIsDeleting(true);
+      await onDelete(post.id);
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
   if (isEditing) {
@@ -55,10 +76,11 @@ const PostCard = ({ post, onEdit, onDelete, canEdit }) => {
             ✏️ 수정
           </button>
           <button 
-            onClick={() => onDelete(post.id)}
+            onClick={handleDelete}
             className="btn btn-danger"
+            disabled={isDeleting}
           >
-            🗑️ 삭제
+            {isDeleting ? '삭제 중...' : '🗑️ 삭제'}
           </button>
         </div>
       )}

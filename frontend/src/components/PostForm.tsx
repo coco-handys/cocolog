@@ -1,11 +1,22 @@
 import React from 'react';
 
-const PostForm = ({ formData, onChange, onSubmit, onCancel, submitText, cancelText }) => {
-  const handleChange = (field, value) => {
+type PostFormData = { title: string; content: string };
+
+type PostFormProps = {
+  formData: PostFormData;
+  onChange: (data: PostFormData) => void;
+  onSubmit: (data: PostFormData) => void | Promise<void>;
+  onCancel: () => void;
+  submitText: string;
+  cancelText: string;
+};
+
+const PostForm: React.FC<PostFormProps> = ({ formData, onChange, onSubmit, onCancel, submitText, cancelText }) => {
+  const handleChange = (field: keyof PostFormData, value: string) => {
     onChange({ ...formData, [field]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSubmit(formData);
   };
@@ -32,7 +43,7 @@ const PostForm = ({ formData, onChange, onSubmit, onCancel, submitText, cancelTe
           onChange={(e) => handleChange('content', e.target.value)}
           required
           placeholder="글 내용을 입력하세요"
-          rows="6"
+          rows={6}
         />
       </div>
       

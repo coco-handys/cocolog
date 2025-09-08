@@ -1,13 +1,25 @@
 import React from 'react';
 
-const AuthForm = ({ type, formData, onChange, onSubmit, onSwitchMode, switchText }) => {
+type LoginData = { username: string; password: string };
+type RegisterData = LoginData & { email: string; password_confirm: string };
+
+type AuthFormProps = {
+  type: 'login' | 'register';
+  formData: LoginData | RegisterData;
+  onChange: (data: any) => void;
+  onSubmit: (data: any) => void | Promise<void>;
+  onSwitchMode: () => void;
+  switchText: string;
+};
+
+const AuthForm: React.FC<AuthFormProps> = ({ type, formData, onChange, onSubmit, onSwitchMode, switchText }) => {
   const isLogin = type === 'login';
 
-  const handleChange = (field, value) => {
-    onChange({ ...formData, [field]: value });
+  const handleChange = (field: string, value: string) => {
+    onChange({ ...(formData as any), [field]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSubmit(formData);
   };
@@ -19,7 +31,7 @@ const AuthForm = ({ type, formData, onChange, onSubmit, onSwitchMode, switchText
         <input
           id="username"
           type="text"
-          value={formData.username}
+          value={(formData as any).username}
           onChange={(e) => handleChange('username', e.target.value)}
           required
           placeholder="사용자명을 입력하세요"
@@ -32,7 +44,7 @@ const AuthForm = ({ type, formData, onChange, onSubmit, onSwitchMode, switchText
           <input
             id="email"
             type="email"
-            value={formData.email}
+            value={(formData as any).email || ''}
             onChange={(e) => handleChange('email', e.target.value)}
             required
             placeholder="이메일을 입력하세요"
@@ -45,7 +57,7 @@ const AuthForm = ({ type, formData, onChange, onSubmit, onSwitchMode, switchText
         <input
           id="password"
           type="password"
-          value={formData.password}
+          value={(formData as any).password}
           onChange={(e) => handleChange('password', e.target.value)}
           required
           placeholder="비밀번호를 입력하세요"
@@ -58,7 +70,7 @@ const AuthForm = ({ type, formData, onChange, onSubmit, onSwitchMode, switchText
           <input
             id="password_confirm"
             type="password"
-            value={formData.password_confirm}
+            value={(formData as any).password_confirm || ''}
             onChange={(e) => handleChange('password_confirm', e.target.value)}
             required
             placeholder="비밀번호를 다시 입력하세요"

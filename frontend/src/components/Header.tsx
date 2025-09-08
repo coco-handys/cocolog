@@ -1,6 +1,16 @@
 import React from 'react';
+import { AuthUser } from '../hooks/useAuth';
 
-const Header = ({ isAuthenticated, currentUser, onLogin, onRegister, onLogout, onCreatePost }) => {
+type HeaderProps = {
+  isAuthenticated: boolean;
+  currentUser: AuthUser | null;
+  onLogin: () => void;
+  onRegister: () => void;
+  onLogout: () => void;
+  onCreatePost: () => void;
+};
+
+const Header: React.FC<HeaderProps> = ({ isAuthenticated, currentUser, onLogin, onRegister, onLogout, onCreatePost }) => {
   return (
     <nav className="navbar">
       <div className="nav-brand">
