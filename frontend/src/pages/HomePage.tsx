@@ -63,8 +63,7 @@ const HomePage: React.FC<HomePageProps> = ({ isAuthenticated, authUser }) => {
 
   return (
     <div className="home-page">
-      <h1>🚀 DevLog</h1>
-      <p className="subtitle">개발자들의 이야기를 나누는 공간</p>
+
       
       {error && <div className="error-message">{error}</div>}
       
