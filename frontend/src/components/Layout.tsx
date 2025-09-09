@@ -5,8 +5,6 @@ import useAuth from '../hooks/useAuth';
 const Layout = ({ children }: { children: React.ReactElement }) => {
   const { loading ,isAuthenticated, setIsAuthenticated, currentUser: authUser, setCurrentUser: setAuthUser, setAuthToken, checkAuthStatus, setLoading } = useAuth();
 
-
-
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
@@ -34,7 +32,7 @@ const Layout = ({ children }: { children: React.ReactElement }) => {
         currentUser={authUser}
         onLogout={handleLogout}
       />
-      <div>
+      <div className={'p-[20px]'}>
         {children}
       </div>
     </>

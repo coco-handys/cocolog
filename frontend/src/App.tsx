@@ -1,7 +1,4 @@
-import axios from 'axios';
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
-
-import './App.css';
 
 // 페이지 컴포넌트
 import HomePage from '@pages/HomePage';
@@ -13,8 +10,6 @@ import CreatePostPage from '@pages/CreatePostPage';
 import { ROUTES } from './routes';
 import Layout from '@components/Layout';
 import useAuth from "@hooks/useAuth";
-
-
 
 function App(): React.ReactElement {
 

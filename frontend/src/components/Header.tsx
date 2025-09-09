@@ -13,21 +13,19 @@ const Header: React.FC<HeaderProps> = ({ isAuthenticated, currentUser, onLogout 
   const router = useNavigate()
 
   return (
-    <nav className="navbar">
-      <div className="nav-brand">
-        <h1>🚀 DevLog</h1>
+    <nav>
+      <div>
+        <h1 className={'head01'}>SHIN EUN HYE</h1>
       </div>
-      <div className="nav-actions">
+      <div>
         {!isAuthenticated ? (
           <>
             <button 
-              className="btn btn-primary"
               onClick={() => router('/login')}
             >
               로그인
             </button>
             <button 
-              className="btn btn-secondary"
               onClick={() => router('/register')}
             >
               회원가입
@@ -35,17 +33,15 @@ const Header: React.FC<HeaderProps> = ({ isAuthenticated, currentUser, onLogout 
           </>
         ) : (
           <>
-            <span className="user-info">
+            <span>
               안녕하세요, {currentUser?.username}님! 👋
             </span>
             <button 
-              className="btn btn-success"
               onClick={() => router('/posts/create')}
             >
               ✍️ 새 글 작성
             </button>
             <button 
-              className="btn btn-outline"
               onClick={onLogout}
             >
               로그아웃
