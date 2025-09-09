@@ -1,16 +1,17 @@
 import React from 'react';
 import { AuthUser } from '../hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
 
 type HeaderProps = {
   isAuthenticated: boolean;
   currentUser: AuthUser | null;
-  onLogin: () => void;
-  onRegister: () => void;
-  onLogout: () => void;
-  onCreatePost: () => void;
+  onLogout?: () => void;
 };
 
-const Header: React.FC<HeaderProps> = ({ isAuthenticated, currentUser, onLogin, onRegister, onLogout, onCreatePost }) => {
+const Header: React.FC<HeaderProps> = ({ isAuthenticated, currentUser, onLogout }) => {
+
+  const router = useNavigate()
+
   return (
     <nav className="navbar">
       <div className="nav-brand">
@@ -21,13 +22,13 @@ const Header: React.FC<HeaderProps> = ({ isAuthenticated, currentUser, onLogin, 
           <>
             <button 
               className="btn btn-primary"
-              onClick={onLogin}
+              onClick={() => router('/login')}
             >
               로그인
             </button>
             <button 
               className="btn btn-secondary"
-              onClick={onRegister}
+              onClick={() => router('/register')}
             >
               회원가입
             </button>
@@ -39,7 +40,7 @@ const Header: React.FC<HeaderProps> = ({ isAuthenticated, currentUser, onLogin, 
             </span>
             <button 
               className="btn btn-success"
-              onClick={onCreatePost}
+              onClick={() => router('/posts/create')}
             >
               ✍️ 새 글 작성
             </button>

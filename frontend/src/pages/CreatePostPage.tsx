@@ -1,21 +1,22 @@
 import React, { useState } from 'react';
-import PostForm from '../components/PostForm';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
-type CreatePostPageProps = {
-  onSubmit: (data: { title: string; content: string }) => Promise<void> | void;
-  onCancel: () => void;
-};
+import PostForm from '@components/PostForm';
+import { API_BASE_URL } from '@utils/config';
+import type { Post } from 'types/post';
 
-const CreatePostPage: React.FC<CreatePostPageProps> = ({ onSubmit, onCancel }) => {
+const CreatePostPage = () => {
+  const router = useNavigate();
   const [postData, setPostData] = useState({
     title: '',
     content: ''
   });
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    await onSubmit(postData);
+  // 새 글 작성
+  const handleCreatePost = async (postData: { title: string; content: string; }): Promise<void> => {
     setPostData({ title: '', content: '' });
+    await axios.post<Post>(`${API_BASE_URL}/posts/`, postData);
   };
 
   return (
@@ -23,12 +24,11 @@ const CreatePostPage: React.FC<CreatePostPageProps> = ({ onSubmit, onCancel }) =
       <div className="form-container">
         <h1>✍️ 새 글 작성</h1>
         <p className="subtitle">새로운 이야기를 공유해보세요</p>
-        
         <PostForm
           formData={postData}
           onChange={setPostData}
-          onSubmit={() => onSubmit(postData)}
-          onCancel={onCancel}
+          onSubmit={handleCreatePost}
+          onCancel={() => router(-1)}
           submitText="글 작성"
           cancelText="취소"
         />

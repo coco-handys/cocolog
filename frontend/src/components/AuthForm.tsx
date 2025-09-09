@@ -4,16 +4,15 @@ type LoginData = { username: string; password: string };
 type RegisterData = LoginData & { email: string; password_confirm: string };
 
 type AuthFormProps = {
-  type: 'login' | 'register';
+  isLoginMode?: boolean;
   formData: LoginData | RegisterData;
   onChange: (data: any) => void;
   onSubmit: (data: any) => void | Promise<void>;
-  onSwitchMode: () => void;
   switchText: string;
+  onChangeMode: () => void;
 };
 
-const AuthForm: React.FC<AuthFormProps> = ({ type, formData, onChange, onSubmit, onSwitchMode, switchText }) => {
-  const isLogin = type === 'login';
+const AuthForm: React.FC<AuthFormProps> = ({ isLoginMode = true, formData, onChange, onSubmit, switchText, onChangeMode }) => {
 
   const handleChange = (field: string, value: string) => {
     onChange({ ...(formData as any), [field]: value });
@@ -38,7 +37,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ type, formData, onChange, onSubmit,
         />
       </div>
       
-      {!isLogin && (
+      {!isLoginMode && (
         <div className="form-group">
           <label htmlFor="email">이메일</label>
           <input
@@ -64,7 +63,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ type, formData, onChange, onSubmit,
         />
       </div>
       
-      {!isLogin && (
+      {!isLoginMode && (
         <div className="form-group">
           <label htmlFor="password_confirm">비밀번호 확인</label>
           <input
@@ -80,9 +79,9 @@ const AuthForm: React.FC<AuthFormProps> = ({ type, formData, onChange, onSubmit,
       
       <div className="form-actions">
         <button type="submit" className="btn btn-primary">
-          {isLogin ? '로그인' : '회원가입'}
+          {isLoginMode ? '로그인' : '회원가입'}
         </button>
-        <button type="button" className="btn btn-link" onClick={onSwitchMode}>
+        <button type="button" className="btn btn-link" onClick={onChangeMode}>
           {switchText}
         </button>
       </div>

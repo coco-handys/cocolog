@@ -1,19 +1,65 @@
-import React from 'react';
-import PostCard from '../components/PostCard';
-import { Post } from '../App';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+
+import { API_BASE_URL } from '@utils/config';
+import { AuthUser } from '@hooks/useAuth';
+import PostCard from '@components/PostCard';
+import type { Post } from 'types/post';
 
 type HomePageProps = {
-  posts: Post[];
-  loading: boolean;
-  error: string | null;
   isAuthenticated: boolean;
-  onEdit: (postId: number, data: { title: string; content: string }) => void | Promise<void>;
-  onDelete: (postId: number) => void | Promise<void>;
-  canEditPost: (post: Post) => boolean;
+  authUser: AuthUser | null;
 };
 
-const HomePage: React.FC<HomePageProps> = ({ posts, loading, error, isAuthenticated, onEdit, onDelete, canEditPost }) => {
-  if (loading) return <div className="loading">로딩 중...</div>;
+const HomePage: React.FC<HomePageProps> = ({ isAuthenticated, authUser }) => {
+
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchPosts = async () => {
+    try {
+      const response = await axios.get<Post[]>(`${API_BASE_URL}/posts/`);
+      setPosts(response.data);
+      setError(null);
+    } catch (err) {
+      setError('글 목록을 불러오는데 실패했습니다.');
+    }
+  };
+
+  useEffect(() => {
+    (async () => await fetchPosts())()
+  }, []);
+
+  // 글 삭제
+  const handleDeletePost = async (postId: number): Promise<void> => {
+    try {
+      await axios.delete(`${API_BASE_URL}/posts/${postId}/`);
+      setPosts(posts.filter(post => post.id !== postId));
+      setError(null);
+    } catch (err) {
+      setError('글 삭제에 실패했습니다.');
+      console.error('Error deleting post:', err);
+    }
+  };
+
+  const canEditPost = (post: Post): boolean => {
+    if (!isAuthenticated || !authUser) return false;
+    if (post.author && post.author === authUser.id) return true;
+    if (post.author_username && post.author_username === authUser.username) return true;
+    return false;
+  };
+
+  // 글 수정
+  const handleEditPost = async (postId: number, postData: { title: string; content: string; }): Promise<void> => {
+    try {
+      const response = await axios.put<Post>(`${API_BASE_URL}/posts/${postId}/`, postData);
+      setPosts(posts.map(post => post.id === postId ? response.data : post));
+      setError(null);
+    } catch (err) {
+      setError('글 수정에 실패했습니다.');
+      console.error('Error updating post:', err);
+    }
+  };
 
   return (
     <div className="home-page">
@@ -34,8 +80,8 @@ const HomePage: React.FC<HomePageProps> = ({ posts, loading, error, isAuthentica
               <PostCard
                 key={post.id}
                 post={post}
-                onEdit={onEdit}
-                onDelete={onDelete}
+                onEdit={handleEditPost}
+                onDelete={handleDeletePost}
                 canEdit={canEditPost(post)}
               />
             ))}

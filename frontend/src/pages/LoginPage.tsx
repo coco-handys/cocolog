@@ -1,23 +1,35 @@
 import React, { useState } from 'react';
-import AuthForm from '../components/AuthForm';
+import { useNavigate } from 'react-router-dom';
+
+import AuthForm from '@components/AuthForm';
+import axios from 'axios';
+import { API_BASE_URL } from '@utils/config';
+import useAuth from '@hooks/useAuth';
 
 type LoginData = { username: string; password: string };
 
-type LoginPageProps = {
-  onLogin: (data: LoginData) => Promise<void> | void;
-  onSwitchToRegister: () => void;
-};
+const LoginPage = () => {
 
-const LoginPage: React.FC<LoginPageProps> = ({ onLogin, onSwitchToRegister }) => {
+  const { setAuthToken, setIsAuthenticated, setCurrentUser } = useAuth();
+  const router = useNavigate();
+
   const [authForm, setAuthForm] = useState<LoginData>({
     username: '',
     password: ''
   });
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    await onLogin(authForm);
-  };
+  const onLogin = async (user: { username: string; password: string; }) => {
+    try {
+      const response = await axios.post<{ token: string; user: any }>(`${API_BASE_URL}/auth/login/`, user);
+      setAuthToken(response.data.token);
+      setCurrentUser(response.data.user);
+      setIsAuthenticated(true);
+      router('/');
+    } catch (err) {
+      console.error('Login error:', err);
+      throw err;
+    }
+  }
 
   return (
     <div className="login-page">
@@ -26,11 +38,10 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, onSwitchToRegister }) =>
         <p className="subtitle">DevLog에 오신 것을 환영합니다</p>
         
         <AuthForm
-          type="login"
           formData={authForm}
           onChange={setAuthForm as any}
-          onSubmit={() => onLogin(authForm)}
-          onSwitchMode={onSwitchToRegister}
+          onSubmit={onLogin}
+          onChangeMode={() => router('/register')}
           switchText="계정이 없으신가요? 회원가입"
         />
       </div>

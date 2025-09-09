@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PostForm from './PostForm';
-import { Post } from '../App';
+import type { Post } from 'types/post';
 
 type PostCardProps = {
   post: Post;

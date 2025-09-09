@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
-import AuthForm from '../components/AuthForm';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+
+import AuthForm from '@components/AuthForm';
+import useAuth, { AuthUser } from '@hooks/useAuth';
+import { API_BASE_URL } from '@utils/config';
 
 type RegisterData = { username: string; email: string; password: string; password_confirm: string };
 
-type RegisterPageProps = {
-  onRegister: (data: RegisterData) => Promise<void> | void;
-  onSwitchToLogin: () => void;
-};
+const RegisterPage = () => {
+  const { setIsAuthenticated, setCurrentUser: setAuthUser, setAuthToken } = useAuth();
+  const router = useNavigate();
 
-const RegisterPage: React.FC<RegisterPageProps> = ({ onRegister, onSwitchToLogin }) => {
   const [authForm, setAuthForm] = useState<RegisterData>({
     username: '',
     email: '',
@@ -16,9 +19,22 @@ const RegisterPage: React.FC<RegisterPageProps> = ({ onRegister, onSwitchToLogin
     password_confirm: ''
   });
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    await onRegister(authForm);
+  const onRegister = async (formData: { username: string; email: string; password: string; password_confirm: string; }): Promise<void> => {
+    try {
+      await axios.post(`${API_BASE_URL}/auth/register/`, formData);
+      await handleLogin({
+        username: formData.username,
+        password: formData.password
+      });
+    } catch (err: any) {
+    }
+  };
+
+  const handleLogin = async (formData: { username: string; password: string; }): Promise<void> => {
+      const response = await axios.post<{ token: string; user: AuthUser }>(`${API_BASE_URL}/auth/login/`, formData);
+      setAuthToken(response.data.token);
+      setAuthUser(response.data.user);
+      setIsAuthenticated(true);
   };
 
   return (
@@ -28,12 +44,12 @@ const RegisterPage: React.FC<RegisterPageProps> = ({ onRegister, onSwitchToLogin
         <p className="subtitle">DevLog의 멤버가 되어보세요</p>
         
         <AuthForm
-          type="register"
+          isLoginMode={false}
           formData={authForm}
           onChange={setAuthForm as any}
           onSubmit={() => onRegister(authForm)}
-          onSwitchMode={onSwitchToLogin}
           switchText="이미 계정이 있으신가요? 로그인"
+          onChangeMode={() => router('/login')}
         />
       </div>
     </div>
