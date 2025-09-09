@@ -4,25 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="beb47364-7222-4c35-ab50-eda47a1c5918" name="변경" comment="refactor. component, page 분리">
-      <change afterPath="$PROJECT_DIR$/frontend/postcss.config.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/styles/base.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/styles/reset.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/styles/tailwind.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/tailwind.config.js" afterDir="false" />
+    <list default="true" id="beb47364-7222-4c35-ab50-eda47a1c5918" name="변경" comment="add. tailwind css 추가">
+      <change afterPath="$PROJECT_DIR$/frontend/public/favicon.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/craco.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/craco.config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/package-lock.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/App.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/App.test.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/App.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/public/favicon.ico" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/public/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/public/logo192.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/public/logo512.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/public/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/public/manifest.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/components/Header.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Header.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/components/Layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Layout.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/index.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/logo.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/tsconfig.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -80,6 +71,7 @@
 }</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/frontend/public" />
       <recent name="$PROJECT_DIR$/frontend/src" />
       <recent name="$PROJECT_DIR$/frontend/src/utils" />
     </key>
@@ -105,7 +97,7 @@
       <workItem from="1755676644975" duration="1000" />
       <workItem from="1755844692092" duration="2279000" />
       <workItem from="1757411441165" duration="1492000" />
-      <workItem from="1757412940437" duration="1137000" />
+      <workItem from="1757412940437" duration="1959000" />
     </task>
     <task id="LOCAL-00001" summary="feat. vercel error처리">
       <option name="closed" value="true" />
@@ -131,7 +123,15 @@
       <option name="project" value="LOCAL" />
       <updated>1757411014097</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="add. tailwind css 추가">
+      <option name="closed" value="true" />
+      <created>1757414103294</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1757414103294</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -152,6 +152,7 @@
     <MESSAGE value="feat. vercel error처리" />
     <MESSAGE value="fix. error 수정" />
     <MESSAGE value="refactor. component, page 분리" />
-    <option name="LAST_COMMIT_MESSAGE" value="refactor. component, page 분리" />
+    <MESSAGE value="add. tailwind css 추가" />
+    <option name="LAST_COMMIT_MESSAGE" value="add. tailwind css 추가" />
   </component>
 </project>

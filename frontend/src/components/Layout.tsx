@@ -1,6 +1,6 @@
 import Header from './Header';
 import React, { useEffect} from 'react';
-import useAuth from '../hooks/useAuth';
+import useAuth from '@hooks/useAuth';
 
 const Layout = ({ children }: { children: React.ReactElement }) => {
   const { loading ,isAuthenticated, setIsAuthenticated, currentUser: authUser, setCurrentUser: setAuthUser, setAuthToken, checkAuthStatus, setLoading } = useAuth();

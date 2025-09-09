@@ -1,6 +1,6 @@
 import React from 'react';
-import { AuthUser } from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
+import { AuthUser } from '@hooks/useAuth';
 
 type HeaderProps = {
   isAuthenticated: boolean;
@@ -13,7 +13,7 @@ const Header: React.FC<HeaderProps> = ({ isAuthenticated, currentUser, onLogout 
   const router = useNavigate()
 
   return (
-    <nav>
+    <nav className={'px-[32px] py-[8px] flex justify-between items-center shadow-sm'}>
       <div>
         <h1 className={'head01'}>SHIN EUN HYE</h1>
       </div>
